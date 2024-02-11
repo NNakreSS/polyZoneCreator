@@ -1,9 +1,6 @@
 # Polyzone Creator
 
-<div style = "padding:1rem;  background-color:blue;  color:wite; text-align:center;">
-    <h2>Create your own polyzone!</h2>
-    A script tool that facilitates easier creation of polyzones using the PolyZone script.
-</div>
+> **A script tool that facilitates easier creation of polyzones using the PolyZone script.**
 
 ## example
 

@@ -2,13 +2,14 @@ local isOpenCretor, Cam = false, nil
 local MAX_CAM_DISTANCE = 100
 local MinY, MaxY = -90.0, 90.0
 local MoveSpeed = 0.15
-local polyzonePoints = {}
-local currentPolyZone, currentPolyZoneName, currnetZ = nil, nil, nil
+local zoneHeight = 4
+local zonePoints = {}
+local currentZone, currentZoneName, currentZ = nil, nil, nil
 
 function toggleCretor(polyzoneName)
     local playerPed = PlayerPedId()
     if not isOpenCretor then
-        currentPolyZoneName, currentPolyZone, currnetZ, polyzonePoints = polyzoneName, nil, nil, {}
+        currentZoneName = polyzoneName;
         local x, y, z = table.unpack(GetGameplayCamCoord())
         local pitch, roll, yaw = table.unpack(GetGameplayCamRot(2))
         local fov = GetGameplayCamFov()
@@ -22,8 +23,9 @@ function toggleCretor(polyzoneName)
         SendReactMessage('polyzoneMode', {
             mod = false
         })
-        currentPolyZone:destroy();
+        destroyZone(currentZone)
         G_CallBackFuntion = nil;
+        currentZoneName, currentZone, currentZ, zonePoints, zoneHeight = polyzoneName, nil, nil, {}, 4
         FreezeEntityPosition(playerPed, false)
         if Cam then
             RenderScriptCams(false, true, 500, true, true)
@@ -86,60 +88,86 @@ function RotationToDirection(rotation)
     }
     return direction
 end
--- #endregion 
+
+-- #endregion
 
 -- #region Manage Polygon Functions
 function keyControls(coords)
     if IsControlJustPressed(0, Keys[Config.CLICK_ADD_POINT]) then
         SendReactMessage('pointCount', 1)
-        table.insert(polyzonePoints, coords)
+        table.insert(zonePoints, coords)
         refreshPolyzone()
     elseif IsControlJustPressed(0, Keys[Config.CLICK_DELETE_POINT]) then
-        if #polyzonePoints > 0 then
+        if #zonePoints > 0 then
             SendReactMessage('pointCount', -1)
-            table.remove(polyzonePoints, #polyzonePoints)
+            table.remove(zonePoints, #zonePoints)
             refreshPolyzone()
         end
+    elseif IsControlPressed(0, Keys[Config.SCROLL_DOWN]) then
+        if zoneHeight > 4 then
+            zoneHeight = zoneHeight - 1
+            refreshPolyzone()
+        end
+    elseif IsControlPressed(0, Keys[Config.SCROLL_UP]) then
+        zoneHeight = zoneHeight + 1
+        refreshPolyzone()
     elseif IsControlPressed(0, Keys[Config.CLICK_SAVE_POLYZONE]) then
-        if #polyzonePoints > 0 then
-            SavePolygon(currentPolyZoneName, polyzonePoints, currnetZ, currentPolyZone)
+        if #zonePoints > 0 then
+            SavePolygon(currentZoneName, zonePoints, currentZ, currentZone, zoneHeight)
         else
             cancelPolygonCreator()
         end
     end
 end
 
-function refreshPolyzone()
-    if currentPolyZone then
-        currentPolyZone:destroy();
-    end
-    if #polyzonePoints > 0 then
-        if #polyzonePoints == 1 then
-            currnetZ = polyzonePoints[1].z
-            print("first : " .. currnetZ)
-        else
-            currnetZ = currnetZ > polyzonePoints[#polyzonePoints].z and polyzonePoints[#polyzonePoints].z or currnetZ
+function destroyZone(zone)
+    if zone then
+        if Config.zoneScript == "polyzone" then
+            zone:destroy();
+        elseif Config.zoneScript == "lib.zone" then
+            zone:remove();
         end
-
-        currentPolyZone = PolyZone:Create(polyzonePoints, {
-            name = currentPolyZoneName,
-            minZ = currnetZ,
-            maxZ = currnetZ + 30.0,
-            debugGrid = true,
-            gridDivisions = 25,
-            debugPoly = true
-        })
     end
 end
 
-function SavePolygon(name, points, minZ, polyzone)
+function refreshPolyzone()
+    destroyZone(currentZone)
+    if #zonePoints > 0 then
+        if #zonePoints == 1 then
+            currentZ = zonePoints[1].z
+        end
+        if Config.zoneScript == "polyzone" then
+            currentZ = math.min(currentZ, zonePoints[#zonePoints].z);
+            currentZone = PolyZone:Create(zonePoints, {
+                name = currentZoneName,
+                minZ = currentZ,
+                maxZ = currentZ + zoneHeight,
+                debugGrid = true,
+                gridDivisions = 25,
+                debugPoly = true
+            })
+        elseif Config.zoneScript == "lib.zone" then
+            zonePoints[#zonePoints] = vector3(zonePoints[#zonePoints].x, zonePoints[#zonePoints].y, currentZ)
+            currentZone = lib.zones.poly({
+                name = currentZoneName,
+                points = zonePoints,
+                thickness = zoneHeight,
+                debug = true
+            })
+        end
+    end
+end
+
+function SavePolygon(name, points, minZ, zone, zoneHeight)
     local success, result = pcall(function()
         G_CallBackFuntion({
             succes = true,
             name = name,
             points = points,
             minZ = minZ,
-            polyzone = polyzone
+            maxZ = minZ + zoneHeight,
+            zone = zone,
+            thickness = zoneHeight
         })
     end)
     if not success then
@@ -158,7 +186,8 @@ function cancelPolygonCreator()
     })
     toggleCretor()
 end
--- #endregion 
+
+-- #endregion
 
 -- #region Cam Controls Functions
 function camControls()
@@ -186,7 +215,7 @@ function checkInput(index, input)
     return IsControlPressed(index, Keys[input])
 end
 
-function moveCamInputs() -- mouse yönüne göre ilerleme 
+function moveCamInputs() --
     local x, y, z = table.unpack(GetCamCoord(Cam))
     local pitch, roll, yaw = table.unpack(GetCamRot(Cam, 2))
 
@@ -220,7 +249,8 @@ function moveCamInputs() -- mouse yönüne göre ilerleme
         SetCamCoord(Cam, x, y, z)
     end
 end
--- #endregion 
+
+-- #endregion
 
 function DisabledControls()
     EnableControlAction(0, 32, true)

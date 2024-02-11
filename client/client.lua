@@ -11,12 +11,6 @@ RegisterCommand('show-nui', function()
     debugPrint('Show NUI frame')
 end)
 
-RegisterNUICallback('hideFrame', function(_, cb)
-    toggleNuiFrame(false)
-    debugPrint('Hide NUI frame')
-    cb({})
-end)
-
 RegisterNUICallback('getKeyInfos', function(_, cb)
     local keyInfos = {{
         key = Config.MOVE_FORWARDS,
@@ -54,9 +48,9 @@ polyzoneMode.start = function(cbFunc, data)
     toggleNuiFrame(true)
     SendReactMessage('polyzoneMode', {
         mod = true,
-        name = data.name,
-        placeholder = data.placeholder or "Enter a name for the polyzone...",
-        button = data.buttontext or "Create PolyZone"
+        name = data?.name or nil,
+        placeholder = data?.placeholder or "Enter a name for the polyzone...",
+        button = data?.buttontext or "Create PolyZone"
     })
 end
 

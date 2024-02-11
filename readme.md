@@ -29,3 +29,8 @@ RegisterCommand("startCreate", function()
     end , options -- (optional) )
 end)
 ```
+
+![Ekran görüntüsü 2024-02-11 183008](https://github.com/NNakreSS/polyZoneCreator/assets/87872407/5cddda80-fb4c-4522-aa0d-7f1e4da66081)
+
+![image](https://github.com/NNakreSS/polyZoneCreator/assets/87872407/f105b617-91f2-47fa-9fb5-749ce935d5bb)
+

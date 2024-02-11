@@ -2,6 +2,8 @@
 
 > **A script tool that facilitates easier creation of polyzones using the PolyZone script.**
 
+> **Dependencies** : https://github.com/mkafrin/PolyZone
+
 ## example
 
 ```lua

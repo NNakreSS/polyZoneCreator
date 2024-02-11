@@ -2,7 +2,7 @@
 
 > **A script tool that facilitates easier creation of polyzones using the PolyZone script.**
 
-> **Dependencies** : https://github.com/mkafrin/PolyZone
+> **Dependencies** : https://github.com/mkafrin/PolyZone or https://github.com/overextended/ox_lib
 
 ### starter
 

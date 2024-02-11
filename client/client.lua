@@ -1,4 +1,5 @@
-local polyzones = {}
+local polyzoneMode = {}
+G_CallBackFuntion = nil;
 
 local function toggleNuiFrame(shouldShow)
     SetNuiFocus(shouldShow, shouldShow)
@@ -42,13 +43,25 @@ RegisterNUICallback('getKeyInfos', function(_, cb)
     cb(keyInfos)
 end)
 
-RegisterNUICallback('startPolyzoneCreator', function(name, cb)
-    toggleCretor(name)
+RegisterNUICallback("startPolyzoneCreator", function(name, cb)
     SetNuiFocus(false, false)
+    toggleCretor(name)
     cb({})
 end)
 
-RegisterNetEvent("start-polyzone-create", function()
+polyzoneMode.start = function(cbFunc, data)
+    G_CallBackFuntion = cbFunc;
     toggleNuiFrame(true)
-    SendReactMessage('startCreatePolyzone', polyzones)
-end)
+    SendReactMessage('polyzoneMode', {
+        mod = true,
+        name = data.name,
+        placeholder = data.placeholder or "Enter a name for the polyzone...",
+        button = data.buttontext or "Create PolyZone"
+    })
+end
+
+function PolyZoneMode()
+    return polyzoneMode
+end
+
+exports("PolyZoneMode", PolyZoneMode)

@@ -9,3 +9,15 @@ Config.MOVE_DOWN = "Q" -- Default: Q
 Config.CLICK_ADD_POINT = "MouseLeft" -- Default: Mouse Left click
 Config.CLICK_DELETE_POINT = "MouseRight" -- Default: Mouse Right click
 Config.CLICK_SAVE_POLYZONE = "ENTER" -- Default: Mouse Right click
+
+Keys = {
+    ["W"] = 32,
+    ["A"] = 34,
+    ["S"] = 33,
+    ["D"] = 35,
+    ["E"] = 46,
+    ["Q"] = 44,
+    ["MouseLeft"] = 69,
+    ["MouseRight"] = 70,
+    ["ENTER"] = 191
+}

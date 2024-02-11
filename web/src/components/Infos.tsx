@@ -57,13 +57,13 @@ const Infos: React.FC = ({}) => {
             className="flex gap-2 justify-center items-center text-center bg-zinc-800 text-sky-500 rounded-md px-5 py-2 font-mono font-bold shadow-[-6px_-6px_0px_0px] shadow-black"
             key={i}
           >
-            {key.key}
+            <span className="text-xl">{key.key}</span>
             {Icons[key.type]}
           </div>
         ))}
         <div className="flex gap-2 justify-center items-center text-center bg-zinc-800 text-sky-500 rounded-md px-5 py-2 font-mono font-bold shadow-[-6px_-6px_0px_0px] shadow-black">
           <svg
-            className="w-6"
+            className="w-[1.25rem] h-[1.75rem]"
             xmlns="http://www.w3.org/2000/svg"
             fill="rgb(14 ,165 ,233)"
             version="1.1"
@@ -78,7 +78,7 @@ const Infos: React.FC = ({}) => {
         </div>
         <div className="flex gap-2 justify-center items-center text-center bg-zinc-800 text-sky-500 rounded-md px-5 py-2 font-mono font-bold shadow-[-6px_-6px_0px_0px] shadow-black">
           <svg
-            className="w-6 text-sky-500"
+            className="w-[1.25rem] h-[1.75rem]"
             xmlns="http://www.w3.org/2000/svg"
             fill="rgb(14 ,165 ,233)"
             version="1.1"

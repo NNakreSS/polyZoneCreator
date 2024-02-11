@@ -5,6 +5,7 @@
 > **Dependencies** : https://github.com/mkafrin/PolyZone
 
 ### starter
+> **cd web**
 
 > **yarn** > **yarn build**
 

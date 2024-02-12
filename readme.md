@@ -43,7 +43,7 @@ RegisterCommand("startCreate", function()
                 debugGrid = false,
                 debugPoly = false
             })
-    end , options -- (optional) )
+    end , options) -- (optional) )
 end)
 ```
 
@@ -78,7 +78,7 @@ RegisterCommand("startCreate", function()
                 onEnter = onEnter,
                 onExit = onExit
                 })
-    end , options -- (optional) )
+    end , options) -- (optional) )
 end)
 ```
 

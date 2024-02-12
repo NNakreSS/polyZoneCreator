@@ -20,6 +20,7 @@ function toggleCretor(polyzoneName)
         RenderScriptCams(true, true, 500, true, true)
         FreezeEntityPosition(playerPed, true)
     else
+        toggleNuiFrame(false)
         SendReactMessage('polyzoneMode', {
             mod = false
         })
